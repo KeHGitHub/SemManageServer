@@ -3,8 +3,8 @@ import bodyParser from "koa-bodyparser"
 import koaLogger from "koa-logger"
 import koaStatic from "koa-static"
 import {Server} from "http"
-import { resolve } from "node:path"
-import { rejects } from "node:assert"
+import {sem} from "./router/sem"
+
 
 console.log("hello world!")
 export class App{
@@ -19,10 +19,30 @@ export class App{
         this.PORT = process.env.PORT ? parseInt(process.env.PORT) : 8080
     }
     public async start():Promise<void>{
+        this.addMidware()
+        this.addRouter()
         return new Promise((resolve,reject)=>{
-            console.log("")
-            return
+            this.server = this.app.listen(this.PORT)
+            resolve()
         })
     }
 
+    public stop():void {
+        this.server.close()
+        console.log(`Server stop listening on port ${this.IP}:${this.PORT}`)
+    }
+    /*
+    private async prepare(){
+
+    }
+    */
+    private addRouter(){
+        this.app.use(sem.routes())
+    }
+
+    private addMidware(){
+        //body parser
+        this.app.use(bodyParser({ formLimit: "20mb", jsonLimit: "20mb" }))
+    }
+    
 }
