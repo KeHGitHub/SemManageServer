@@ -3,7 +3,10 @@ import bodyParser from "koa-bodyparser"
 import koaLogger from "koa-logger"
 import koaStatic from "koa-static"
 import {Server} from "http"
+import { resolve } from "node:path"
+import { rejects } from "node:assert"
 
+console.log("hello world!")
 export class App{
     public app: Koa
     private server!: Server
@@ -16,7 +19,10 @@ export class App{
         this.PORT = process.env.PORT ? parseInt(process.env.PORT) : 8080
     }
     public async start():Promise<void>{
-        
+        return new Promise((resolve,reject)=>{
+            console.log("")
+            return
+        })
     }
 
 }
